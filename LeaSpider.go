@@ -503,7 +503,10 @@ func (this *LeaSpider) getNoChildrenFileExts() []string {
 // 得到内容
 func (this *LeaSpider) getContent(url string) (content string, err error) {
 	var resp *http.Response
-	resp, err = GetResponse(url)
+	if conf.Proxy {
+		os.Setenv("HTTP_PROXY", conf.ProxyURL)
+	}
+	resp, err = http.Get(url)
 	if resp != nil && resp.Body != nil {
 		defer resp.Body.Close()
 	} else {
